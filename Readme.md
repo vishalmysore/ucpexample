@@ -1,6 +1,6 @@
-# Google’s UCP (Universal Communication Protocol)
+# Java Example of Google’s UCP (Universal Communication Protocol)
 
-Google’s UCP (Universal Communication Protocol) is an emerging agent-to-agent interoperability protocol designed to let AI agents built by different vendors communicate, discover capabilities, exchange context, and invoke actions in a standardized way.
+This project demonstrates Java implementation of Google’s UCP (Universal Communication Protocol) which is an emerging agent-to-agent interoperability protocol designed to let AI agents built by different vendors communicate, discover capabilities, exchange context, and invoke actions in a standardized way.
 
 UCP focuses on capability discovery, identity, security, and structured message exchange, so agents can collaborate without tight coupling or proprietary integrations. In practice, it acts as a neutral “language” between agents, enabling ecosystems where tools, agents, and services can work together across platforms—similar in spirit to how HTTP standardized web communication, but specifically for autonomous and semi-autonomous AI agents.
 
