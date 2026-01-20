@@ -1,0 +1,40 @@
+{
+  "ucp": {
+    "version": "2026-01-19",
+    "services": {
+      "dev.ucp.shopping": {
+        "version": "2026-01-11",
+        "spec": "https://ucp.dev/specification/overview",
+        "rest": {
+          "endpoint": "https://api.autogroup-north.com/ucp/v1",
+          "schema": "https://ucp.dev/services/shopping/openapi.json"
+        },
+        "mcp": {
+          "endpoint": "https://api.autogroup-north.com/ucp/mcp",
+          "schema": "https://ucp.dev/services/shopping/mcp.openrpc.json"
+        }
+      }
+    },
+    "capabilities": [
+      {
+        "name": "dev.ucp.shopping.checkout",
+        "version": "2026-01-11",
+        "spec": "https://ucp.dev/specification/checkout",
+        "schema": "https://ucp.dev/schemas/shopping/checkout.json"
+      },
+      {
+        "name": "dev.ucp.shopping.fulfillment",
+        "version": "2026-01-11",
+        "spec": "https://ucp.dev/specification/fulfillment",
+        "schema": "https://ucp.dev/schemas/shopping/fulfillment.json",
+        "extends": "dev.ucp.shopping.checkout"
+      },
+      {
+        "name": "io.github.vishalmysore.car_comparison",
+        "version": "2026-01-19",
+        "spec": "https://autogroup-north.com/specs/car-comparison",
+        "schema": "https://autogroup-north.com/schemas/comparison.json"
+      }
+    ]
+  }
+}
