@@ -16,7 +16,7 @@ import java.util.Map;
  * UCP Business for comparing cars
  * Only one agent can have tag ucp business in a spring boot application
  * UCP Capabilities define the individual capabilities provided by this business
- * they can rest controllers or services
+ * they can only be rest controllers not services , this is because ucp manifest mandates that ucp should support rest and mcp
  * if its rest controller then the ucp manifest should add transport as rest
  * else its rpc
  * this is a sample service for car booking which will use json rpc as transport
