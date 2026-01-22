@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spring Actions - A2A & MCP Integration Framework</title>
+    <title>Java Example of Google's UCP (Universal Communication Protocol)</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
     <style>
@@ -65,15 +65,19 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="#">Spring Actions</a>
+            <a class="navbar-brand" href="#">UCP Java Example</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link" href="#overview">Overview</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#architecture">Architecture</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#integration">Integration</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#why-matters">Why UCP</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#core-concepts">Core Concepts</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#implementation">Implementation</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#standard-capabilities">Capabilities</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#discovery">Discovery</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#api-examples">API Examples</a></li>
                     <li class="nav-item"><a class="nav-link" href="#testing">Testing</a></li>
                 </ul>
             </div>
@@ -82,11 +86,11 @@
 
     <div class="hero">
         <div class="container text-center">
-            <h1 class="display-4">Spring Actions</h1>
-            <p class="lead">A2A & MCP Integration Framework</p>
+            <h1 class="display-4">Java Example of Google's UCP</h1>
+            <p class="lead">Universal Communication Protocol for AI Agents</p>
             <div class="mt-4">
-                <span class="protocol-badge a2a-badge">Google A2A</span>
-                <span class="protocol-badge mcp-badge">Anthropic MCP</span>
+                <span class="protocol-badge a2a-badge">Google UCP</span>
+                <span class="protocol-badge mcp-badge">Agent-to-Agent</span>
             </div>
         </div>
     </div>
@@ -95,17 +99,20 @@
         <section id="overview" class="mb-5">
             <h2>Overview</h2>
             <p class="lead">
-                Spring Actions is a powerful framework that enables your Spring Boot applications to communicate with AI agents through multiple protocols. The framework supports both Google's Agent-to-Agent (A2A) protocol and Anthropic's Model Context Protocol (MCP).
-                <a href="https://github.com/vishalmysore/a2ajava" target="_blank">a2ajava</a> is a Swiss Army knife for building agentic applications. It is multi-protocol — works seamlessly with both A2A (Agent-to-Agent) and MCP (Model Context Protocol). It is multi-language — supports Java, Kotlin, and Groovy. It is multi-platform — compatible with Gemini, OpenAI, Claude, and Grok. It is multi-client — includes A2A and MCP clients with connectors in Java, Node, and Python. It offers multi-integration — out-of-the-box support for Selenium, human-in-the-loop workflows, and multi-LLM voting for consensus-based decision making. Agents built using the A2A protocol with a2ajava run seamlessly on MCP as well, ensuring maximum interoperability across platforms.
+                This project demonstrates Java implementation of Google's UCP (Universal Communication Protocol) which is an emerging agent-to-agent interoperability protocol designed to let AI agents built by different vendors communicate, discover capabilities, exchange context, and invoke actions in a standardized way.
+
+UCP focuses on capability discovery, identity, security, and structured message exchange, so agents can collaborate without tight coupling or proprietary integrations. In practice, it acts as a neutral "language" between agents, enabling ecosystems where tools, agents, and services can work together across platforms—similar in spirit to how HTTP standardized web communication, but specifically for autonomous and semi-autonomous AI agents.
+
+This AI Agent for UCP will be using <a href="https://github.com/vishalmysore/tools4ai" target="_blank">tools4ai</a>, <a href="https://github.com/vishalmysore/a2ajava" target="_blank">a2ajava</a>, and <a href="https://github.com/vishalmysore/ucpjava" target="_blank">ucpjava</a> as core libraries.
 
             </p>
             <div class="row mt-4">
                 <div class="col-md-6">
                     <div class="card feature-card">
                         <div class="card-body">
-                            <h5 class="card-title">🤖 A2A Protocol</h5>
+                            <h5 class="card-title">🔍 Capability Discovery</h5>
                             <p class="card-text">
-                                Google's A2A protocol enables seamless communication between AI agents and services through a standardized discovery and interaction format.
+                                Platforms dynamically find business capabilities via profiles at /.well-known/ucp.
                             </p>
                         </div>
                     </div>
@@ -113,9 +120,9 @@
                 <div class="col-md-6">
                     <div class="card feature-card">
                         <div class="card-body">
-                            <h5 class="card-title">🔧 MCP Protocol</h5>
+                            <h5 class="card-title">🔄 Transport Agnostic</h5>
                             <p class="card-text">
-                                Anthropic's MCP provides structured interactions between AI models and external tools with runtime validation and standardized error handling.
+                                Works across REST, MCP, and A2A protocols for maximum interoperability.
                             </p>
                         </div>
                     </div>
@@ -123,118 +130,495 @@
             </div>
         </section>
 
-        <section id="architecture" class="mb-5">
-            <h2>Architecture</h2>
-            <div class="row">
-                <div class="col-md-12">
-                    <img src="a2a_agent.png" alt="Architecture Diagram" class="architecture-diagram">
-                    <div class="mt-4">
-                        <h4>Key Components</h4>
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                <strong>A2A Integration:</strong> Automatic service discovery and agent card generation
-                            </li>
-                            <li class="list-group-item">
-                                <strong>MCP Tools:</strong> Structured tool definitions with parameter validation
-                            </li>
-                            <li class="list-group-item">
-                                <strong>Spring Services:</strong> Annotation-based service exposure with @Agent and @Action
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+        <section id="why-matters" class="mb-5">
+            <h2>Why UCP Matters</h2>
+            <p class="lead">
+                Today's commerce ecosystem, platforms, businesses, payment providers, and credential providers operate on disparate systems, creating integration complexity and abandoned transactions. UCP addresses this fragmentation by providing:
+            </p>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <strong>Standardized Common Language:</strong> A unified way for all commerce entities to communicate
+                </li>
+                <li class="list-group-item">
+                    <strong>Functional Primitives:</strong> Core building blocks that enable seamless interactions
+                </li>
+                <li class="list-group-item">
+                    <strong>Reduced Integration Complexity:</strong> No need for custom integrations for each platform
+                </li>
+                <li class="list-group-item">
+                    <strong>Future-Proof Architecture:</strong> Support for both human-in-the-loop and autonomous AI agent commerce flows
+                </li>
+            </ul>
         </section>
 
-        <section id="integration" class="mb-5">
-            <h2>Integration Methods</h2>
-            <div class="row">
-                <div class="col-md-6">
-                    <h4>A2A Integration</h4>
-                    <div class="code-block">
-                        <p>Agent Card Endpoint:</p>
-                        <code>https://vishalmysore-a2amcpspring.hf.space/.well-known/agent.json</code>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <h4>MCP Integration</h4>
-                    <div class="code-block">
-                        <p>MCP Connector Configuration:</p>
-<pre><code class="language-json">{
-    "customerservice": {
-        "command": "java",
-        "args": [
-            "-jar",
-            "/work/a2a-mcp-bridge/target/mcp-connector-full.jar",
-            "https://vishalmysore-a2amcpspring.hf.space/"
-        ],
-        "timeout": 30000
-    }
+        <section id="core-concepts" class="mb-5">
+            <h2>Core Concepts</h2>
+            <h3>UCP Protocol Architecture</h3>
+            <p>UCP addresses fragmented commerce by providing standardized interaction patterns through three key capabilities:</p>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <strong>Discovery:</strong> Platforms dynamically find business capabilities via profiles at /.well-known/ucp
+                </li>
+                <li class="list-group-item">
+                    <strong>Transport Agnostic:</strong> Works across REST, MCP (Model Context Protocol), and A2A protocols
+                </li>
+                <li class="list-group-item">
+                    <strong>Modular Design:</strong> Composable capabilities and extensions for flexible implementation
+                </li>
+            </ul>
+
+            <h4>UCP Business</h4>
+            <p>A UCP Business is the entity selling goods or services that acts as the Merchant of Record (MoR), retaining financial liability and ownership. In code, this is represented by the @UCPBusiness annotation.</p>
+            <p><strong>Key Constraint:</strong> UCP enforces that each host represents exactly one merchant to maintain clear liability and ownership.</p>
+            <div class="code-block">
+                <pre><code class="language-java">@UCPBusiness(name = "AutoGroup North", version = "2026-01-19")
+public class ShoppingService implements UCPAware {
+// Business implementation
 }</code></pre>
-                    </div>
-                </div>
+            </div>
+
+            <h4>UCP Capability</h4>
+            <p>A UCP Capability is a standalone core feature that a business supports—the fundamental "verbs" of UCP. These are declared using @UCPCapability annotations and follow reverse-domain naming conventions.</p>
+
+            <h5>Capability Namespace Patterns</h5>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Namespace Pattern</th>
+                        <th>Authority</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>dev.ucp.*</td>
+                        <td>UCP governing body</td>
+                        <td>dev.ucp.shopping.checkout</td>
+                    </tr>
+                    <tr>
+                        <td>com.vendor.*</td>
+                        <td>Vendor organization</td>
+                        <td>com.example.payments.installments</td>
+                    </tr>
+                    <tr>
+                        <td>io.github.*</td>
+                        <td>Custom implementations</td>
+                        <td>io.github.vishalmysore.car_booking</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h5>Standard UCP Capabilities</h5>
+            <p>UCP defines several standard capabilities:</p>
+            <ul>
+                <li><strong>Checkout:</strong> Cart management and checkout sessions</li>
+                <li><strong>Identity Linking:</strong> OAuth 2.0 authorization</li>
+                <li><strong>Order:</strong> Lifecycle event webhooks</li>
+            </ul>
+
+            <h5>Capability Structure</h5>
+            <p>All capabilities must include:</p>
+            <ul>
+                <li><strong>Name:</strong> Reverse-domain format (e.g., dev.ucp.shopping.checkout)</li>
+                <li><strong>Version:</strong> YYYY-MM-DD format</li>
+                <li><strong>Spec URL:</strong> Link to specification document</li>
+                <li><strong>Schema URL:</strong> Link to JSON Schema definition</li>
+            </ul>
+            <div class="code-block">
+                <pre><code class="language-java">@UCPCapability(
+name = "dev.ucp.shopping.checkout",
+version = "2026-01-11",
+spec = "https://ucp.dev/specification/checkout",
+schema = "https://ucp.dev/schemas/shopping/checkout.json"
+)
+public Object createCheckout(Map<String, Object> checkoutRequest);</code></pre>
             </div>
         </section>
 
-        <section id="testing" class="mb-5">
-            <h2>Testing Methods</h2>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card feature-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Local Testing</h5>
-                            <p class="card-text">Access Swagger UI at:</p>
-                            <code>http://localhost:7860/swagger-ui/index.html</code>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card feature-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Demo Environment</h5>
-                            <p class="card-text">Access deployed demo at:</p>
-                            <code>https://vishalmysore-a2amcpspring.hf.space/swagger-ui/index.html</code>
-                        </div>
-                    </div>
-                </div>
+        <section id="implementation" class="mb-5">
+            <h2>Implementation Architecture</h2>
+            <h4>What This Guide Covers</h4>
+            <p>This implementation guide walks through building a complete UCP-compliant Java application that demonstrates:</p>
+            <ul>
+                <li><strong>Core UCP Concepts:</strong> Understanding the protocol's architecture, including roles of Platforms, Businesses, Credential Providers, and Payment Service Providers</li>
+                <li><strong>Transport Protocols:</strong> Implementing dual support for REST APIs and Model Context Protocol (MCP) for AI agent integration</li>
+                <li><strong>Capability Discovery:</strong> Building dynamic discovery profiles that allow platforms to autonomously detect business capabilities</li>
+                <li><strong>Standard vs Custom Capabilities:</strong> Implementing both standard UCP capabilities and custom business-specific features</li>
+                <li><strong>Security Patterns:</strong> Leveraging OAuth 2.0 for identity linking and AP2 mandates for secure autonomous transactions</li>
+            </ul>
+
+            <h4>Implementation Approach</h4>
+            <p>The guide presents a practical, code-first approach using Spring Boot with the tools4ai framework, demonstrating how to:</p>
+            <ul>
+                <li>Structure UCP-aware services using the UCPAware interface for standard capabilities</li>
+                <li>Create custom capabilities through proper annotation patterns</li>
+                <li>Implement the required REST endpoints for standard checkout operations</li>
+                <li>Configure MCP transport for AI agent integration</li>
+                <li>Generate compliant discovery profiles for capability negotiation</li>
+            </ul>
+        </section>
+
+        <section id="standard-capabilities" class="mb-5">
+            <h2>Standard UCP Capabilities</h2>
+            <h4>UCPAware Interface</h4>
+            <p>The UCPAware interface defines standard UCP capabilities that must be implemented for core commerce operations:</p>
+            <div class="code-block">
+                <pre><code class="language-java">public interface UCPAware {
+
+    @UCPCapability(
+        name = "dev.ucp.shopping.checkout",
+        version = "2026-01-11",
+        spec = "https://ucp.dev/specification/checkout",
+        schema = "https://ucp.dev/schemas/shopping/checkout.json"
+    )
+    Object createCheckout(Map<String, Object> checkoutRequest);
+
+    @UCPCapability(
+        name = "dev.ucp.shopping.order",
+        version = "2026-01-11",
+        spec = "https://ucp.dev/specification/order",
+        schema = "https://ucp.dev/schemas/shopping/order.json"
+    )
+    Object getOrder(String orderId);
+
+    @UCPCapability(
+        name = "dev.ucp.common.identity_linking",
+        version = "2026-01-11",
+        spec = "https://ucp.dev/specification/identity-linking",
+        schema = "https://ucp.dev/schemas/common/identity_linking.json"
+    )
+    Object linkIdentity(Map<String, Object> identityRequest);
+}</code></pre>
             </div>
 
-            <div class="mt-4">
-                <h4>Testing Examples</h4>
-                <div class="code-block">
-                    <p>MCP List Tools:</p>
-<pre><code class="language-bash">curl -H "Content-Type: application/json" -d '{
+            <h5>Key Requirements</h5>
+            <ul>
+                <li>Standard capabilities require exact REST endpoint implementations</li>
+                <li>All capabilities must use YYYY-MM-DD versioning</li>
+                <li>Spec and schema URLs must be included</li>
+                <li>Capabilities are discovered automatically through annotation scanning</li>
+            </ul>
+
+            <h4>Custom Capabilities</h4>
+            <h5>Implementation Example: Car Booking</h5>
+            <p>Custom capabilities allow businesses to extend UCP with domain-specific features while maintaining protocol compliance.</p>
+            <div class="code-block">
+                <pre><code class="language-java">package io.github.vishalmysore.controllers;
+
+import com.t4a.annotations.Action;
+import com.t4a.annotations.Agent;
+import com.t4a.processor.ProcessorAware;
+import io.github.vishalmysore.a2ui.A2UIAware;
+import io.github.vishalmysore.ucp.annotation.UCPCapability;
+import io.github.vishalmysore.ucp.domain.SimpleUCPResult;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+* UCP Business for car booking
+*
+* IMPORTANT CONSTRAINTS:
+* - Only one agent can have tag @UCPBusiness in our Spring Boot application
+* - UCP Capabilities can only be in REST controllers (not services)
+* - This is required because UCP mandates support for both REST and MCP transports
+* - If it's a REST controller, the UCP manifest adds transport as "rest"
+*/
+@Agent(
+groupName = "carbooking",
+groupDescription = "car booking service",
+prompt = "You are a car booking assistant. Help users book cars based on their preferences and requirements."
+)
+@RestController(value = "/carbooking")
+public class CarbookingController implements ProcessorAware, A2UIAware {
+
+@Action(description = "Book a car based on user preferences")
+@UCPCapability(
+name = "io.github.vishalmysore.car_booking",
+version = "2026-01-19",
+spec = "https://autogroup-north.com/specs/car-booking",
+schema = "https://autogroup-north.com/schemas/booking.json"
+)
+@PostMapping("/bookCar")
+public SimpleUCPResult bookCar(
+String carType,
+String pickupLocation,
+String dropoffLocation,
+String pickupDate,
+String dropoffDate) {
+
+// Booking logic here
+Map<String, String> bookingDetails = new HashMap<>();
+bookingDetails.put("carType", carType);
+bookingDetails.put("pickupLocation", pickupLocation);
+bookingDetails.put("dropoffLocation", dropoffLocation);
+bookingDetails.put("pickupDate", pickupDate);
+bookingDetails.put("dropoffDate", dropoffDate);
+bookingDetails.put("confirmationNumber", "ABC123XYZ");
+
+return new SimpleUCPResult(bookingDetails);
+}
+}</code></pre>
+            </div>
+        </section>
+
+        <section id="service-patterns" class="mb-5">
+            <h2>Service Types & Patterns</h2>
+            <h4>Service Type Comparison</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Service Type</th>
+                        <th>Annotation</th>
+                        <th>Transport</th>
+                        <th>Use Case</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>UCP Business</td>
+                        <td>@UCPBusiness + @RestController</td>
+                        <td>REST + MCP</td>
+                        <td>Standard commerce capabilities</td>
+                    </tr>
+                    <tr>
+                        <td>Agentic Service</td>
+                        <td>@Agent</td>
+                        <td>MCP + A2A</td>
+                        <td>AI agent interactions</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Agentic Service Example: Car Selling</h4>
+            <p>Services that are NOT UCP capabilities but are available for AI agent interactions:</p>
+            <div class="code-block">
+                <pre><code class="language-java">package io.github.vishalmysore.service;
+
+import com.t4a.annotations.Action;
+import com.t4a.annotations.Agent;
+import com.t4a.processor.ProcessorAware;
+import io.github.vishalmysore.a2ui.A2UIAware;
+
+/**
+* MCP Service for car selling
+*
+* IMPORTANT CONSTRAINTS:
+* - This is NOT a UCP Business or UCP Capability
+* - Only exposed via MCP and A2A protocols
+* - Does NOT require REST endpoint
+* - Cannot use @UCPCapability annotation (will throw error during startup)
+*/
+@Agent(
+groupName = "carbooking",
+groupDescription = "car booking service",
+prompt = "You are a car booking assistant. Help users book cars based on their preferences and requirements."
+)
+public class CarSellingService implements ProcessorAware, A2UIAware {
+
+/**
+* This is an agentic action exposed only via MCP and A2A
+* It is NOT a UCP business or capability
+*/
+@Action(description = "Sell a car based on user preferences")
+// @UCPCapability(name = "io.github.vishalmysore.sell_car", ...)
+// ⚠️ CANNOT uncomment above - will throw error:
+// "UCP Violation: Agent CarSellingService must be annotated with
+// @RestController to support REST transport"
+public Object sellCar(
+String carType,
+String pickupLocation,
+String dropoffLocation,
+String pickupDate,
+String dropoffDate) {
+
+return "Car sold: " + carType + " from " + pickupLocation +
+" to " + dropoffLocation + " between " + pickupDate +
+" and " + dropoffDate;
+}
+}</code></pre>
+            </div>
+        </section>
+
+        <section id="discovery" class="mb-5">
+            <h2>Discovery & Endpoint Resolution</h2>
+            <h4>Generated UCP Manifest</h4>
+            <p>The framework automatically generates a complete UCP discovery profile at /.well-known/ucp:</p>
+            <div class="code-block">
+                <pre><code class="language-json">{
+"ucp": {
+"capabilities": [
+{
+"schema": "https://autogroup-north.com/schemas/inventory_search.json",
+"name": "io.github.vishalmysore.inventory_search",
+"version": "2026-01-19",
+"spec": "https://autogroup-north.com/specs/inventory-search"
+},
+{
+"schema": "https://ucp.dev/schemas/shopping/order.json",
+"name": "dev.ucp.shopping.order",
+"version": "2026-01-11",
+"spec": "https://ucp.dev/specification/order"
+},
+{
+"schema": "https://ucp.dev/schemas/shopping/checkout.json",
+"name": "dev.ucp.shopping.checkout",
+"version": "2026-01-11",
+"spec": "https://ucp.dev/specification/checkout"
+},
+{
+"schema": "https://autogroup-north.com/schemas/comparison.json",
+"name": "io.github.vishalmysore.car_comparison",
+"version": "2026-01-19",
+"spec": "https://autogroup-north.com/specs/car-comparison"
+},
+{
+"schema": "https://autogroup-north.com/schemas/booking.json",
+"name": "io.github.vishalmysore.car_booking",
+"version": "2026-01-19",
+"spec": "https://autogroup-north.com/specs/car-booking"
+},
+{
+"schema": "https://ucp.dev/schemas/common/identity_linking.json",
+"name": "dev.ucp.common.identity_linking",
+"version": "2026-01-11",
+"spec": "https://ucp.dev/specification/identity-linking"
+}
+],
+"services": {
+"dev.ucp.shopping": {
+"rest": {
+"schema": "https://ucp.dev/services/shopping/openapi.json",
+"endpoint": "http://localhost:7860/ucp/v1"
+},
+"mcp": {
+"schema": "https://ucp.dev/services/shopping/mcp.openrpc.json",
+"endpoint": "http://localhost:7860/ucp/mcp"
+},
+"version": "2026-01-11",
+"spec": "https://ucp.dev/specification/overview"
+}
+},
+"version": "2026-01-19"
+}
+}</code></pre>
+            </div>
+
+            <h4>Client Discovery Process</h4>
+            <p>To discover the specific REST call for booking a car, the client follows this systematic <strong>Endpoint Resolution</strong> process:</p>
+            <ol>
+                <li><strong>Identify the Vertical (Service):</strong> The client examines the <code>services</code> object. "Booking" or "Checkout" typically falls under the <code>dev.ucp.shopping</code> service.</li>
+                <li><strong>Fetch the Transport Schema:</strong> The client retrieves the OpenAPI specification from the <code>rest.schema</code> field.</li>
+                <li><strong>Match the Capability to the Path:</strong> The client sees the <code>io.github.vishalmysore.car_booking</code> capability is advertised.</li>
+                <li><strong>Resolve the Final URL:</strong> The client appends the OpenAPI path to the service endpoint.</li>
+                <li><strong>Construct the Payload (Schema Composition):</strong> This is the most critical step for custom capabilities.</li>
+            </ol>
+        </section>
+
+        <section id="api-examples" class="mb-5">
+            <h2>API Examples</h2>
+            <p>This section provides practical examples of how to interact with the UCP implementation using both MCP (Model Context Protocol) and UCP protocols.</p>
+
+            <h4>MCP Tools List Example</h4>
+            <p>The following curl command demonstrates how to list available tools using the MCP protocol:</p>
+            <div class="code-block">
+                <pre><code class="language-bash">curl -H "Content-Type: application/json" -d '{
     "jsonrpc": "2.0",
     "method": "tools/list",
     "params": {},
     "id": 1
-}' https://vishalmysore-a2amcpspring.hf.space/</code></pre>
-                </div>
-
-                <div class="code-block">
-                    <p>MCP Tool Call:</p>
-<pre><code class="language-json">{
-    "method": "tools/call",
-    "params": {
-        "name": "whatThisPersonFavFood",
-        "arguments": {
-            "provideAllValuesInPlainEnglish": "vishal is coming home what should i cook"
-        }
-    },
-    "jsonrpc": "2.0",
-    "id": 17
-}</code></pre>
-                </div>
+}' http://localhost:7860/</code></pre>
             </div>
+
+            <h4>MCP Tool Call Example</h4>
+            <p>The following curl command demonstrates how to call the <code>compareCar</code> tool using the MCP protocol:</p>
+            <div class="code-block">
+                <pre><code class="language-bash">curl -H "Content-Type: application/json" -d '{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "method": "tools/call",
+  "params": {
+    "name": "compareCar",
+    "arguments": {
+      "provideAllValuesInPlainEnglish": "{\"car1\": \"Tesla Model 3\", \"car2\": \"BMW i4\"}"
+    }
+  }
+}' http://localhost:7860/</code></pre>
+            </div>
+            <p><strong>Response:</strong></p>
+            <div class="code-block">
+                <pre><code class="language-json">{"result":{"content":[{"type":"text","annotations":null,"text":"Tesla Model 3 is better than BMW i4","type":"text"}],"textResult":"Tesla Model 3 is better than BMW i4"},"id":2,"jsonrpc":"2.0"}</code></pre>
+            </div>
+
+            <h4>UCP Protocol Example</h4>
+            <p>The following curl command demonstrates how to use the UCP protocol for car booking:</p>
+            <div class="code-block">
+                <pre><code class="language-bash">curl -H "Content-Type: application/json" -d '{
+  "jsonrpc": "2.0",
+  "method": "io.github.vishalmysore.car_booking",
+  "params": {
+    "_meta": {
+      "ucp": {
+        "profile": "https://platform.example/profiles/v2026-01/shopping-agent.json"
+      }
+    },
+    "car_model": "Toyota Camry",
+    "booking_date": "2026-01-25",
+    "customer_info": {
+      "name": "John Doe",
+      "email": "john@example.com"
+    }
+  },
+  "id": 1
+}' http://localhost:7860/ucp/mcp</code></pre>
+            </div>
+            <p><strong>Response:</strong></p>
+            <div class="code-block">
+                <pre><code class="language-json">{"result":{"ucp":{"capabilities":[{"name":"io.github.vishalmysore.car_booking","version":"2026-01-19"}],"version":"2026-01-11"},"carType":"Toyota Camry","confirmationNumber":"ABC123XYZ","dropoffDate":null,"dropoffLocation":null,"pickupDate":"2026-01-25","pickupLocation":null},"id":1,"jsonrpc":"2.0"}</code></pre>
+            </div>
+        </section>
+
+        <section id="design-considerations" class="mb-5">
+            <h2>Design Considerations</h2>
+            <h4>Annotation-Driven Approach</h4>
+            <p>The annotation-driven approach in this UCP implementation provides automatic capability discovery, clean separation of concerns, and dual transport support.</p>
+
+            <h5>Advantages</h5>
+            <ol>
+                <li><strong>Automatic Discovery:</strong> The UCPController automatically scans for @UCPCapability annotations and generates the discovery profile.</li>
+                <li><strong>Clean Architecture:</strong> The separation between @Agent services (MCP/A2A only) and @UCPBusiness controllers (REST + MCP).</li>
+                <li><strong>Type Safety:</strong> Annotations provide compile-time checking for capability names, version formats, and required fields.</li>
+            </ol>
+
+            <h5>Future Considerations</h5>
+            <p>These are the areas for potential improvement which I will consider in future iterations:</p>
+            <ol>
+                <li><strong>Validation Complexity:</strong> Annotation values (like YYYY-MM-DD version format) must be validated at runtime.</li>
+                <li><strong>Framework Coupling:</strong> The approach tightly couples business logic to UCP framework and Spring's annotation processing.</li>
+                <li><strong>Runtime Overhead:</strong> Annotation scanning at startup adds initialization time, though typically negligible.</li>
+            </ol>
+
+            <h5>Implementation Quality</h5>
+            <p>Current implementation handles complexity well by:</p>
+            <ul>
+                <li>Enforcing Single Merchant: One UCPAware implementation per host</li>
+                <li>Namespace Validation: Validates namespace authority for spec URLs</li>
+                <li>Automatic Profile Generation: Generates compliant discovery profiles</li>
+                <li>Dual Capability Support: Supports both standard and custom capabilities</li>
+            </ul>
+            <p>The annotation approach is particularly effective for UCP because it maps naturally to the protocol's capability-based design and enables the dynamic discovery that UCP emphasizes.</p>
         </section>
     </div>
 
     <footer class="bg-light py-4 mt-5">
         <div class="container text-center">
-            <p>Built with ❤️ using Spring Boot, A2A, and MCP</p>
+            <p>Built with ❤️ using Spring Boot, UCP, and MCP</p>
             <p>
-                <a href="https://github.com/vishalmysore/a2ajava" target="_blank" class="text-decoration-none">A2AJava</a> | 
-                <a href="https://github.com/vishalmysore/mcp-connector" target="_blank" class="text-decoration-none">MCP Connector</a>
+                <a href="https://github.com/vishalmysore/tools4ai" target="_blank" class="text-decoration-none">Tools4AI</a> |
+                <a href="https://github.com/vishalmysore/a2ajava" target="_blank" class="text-decoration-none">A2AJava</a> |
+                <a href="https://github.com/vishalmysore/ucpjava" target="_blank" class="text-decoration-none">UCPJava</a>
             </p>
         </div>
     </footer>

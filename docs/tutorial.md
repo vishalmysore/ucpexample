@@ -1,4 +1,4 @@
-# Universal Commerce Protocol (UCP) in Java: Complete Guide to Agentic Checkout
+# Universal Commerce Protocol (UCP) in Java: Complete Guide to Agentic Commence Checkout
 ### Learn how to implement UCP capabilities in a Spring Boot app and create and agentic shopping application 
 As AI agents and autonomous commerce become increasingly prevalent, the need for standardized interoperability has never been more critical. This comprehensive guide demonstrates how to implement UCP (Universal Commerce Protocol) in Java using the tools4ai framework, providing both theoretical understanding and practical implementation patterns.
 
